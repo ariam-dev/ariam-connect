@@ -50,6 +50,10 @@ html:not(.android) .btn {
   padding: 0 10px;
 }
 
+html:not(.android) .panel-toggle {
+  min-height: 28px;
+}
+
 html:not(.android) .topbar {
   gap: 6px;
   padding: 6px 10px;

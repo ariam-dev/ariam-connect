@@ -5,6 +5,8 @@
 //
 // options.confirm(message) -> boolean | Promise<boolean> replaces
 // window.confirm, which extension popups do not have.
+// options.unauthorizedMessage replaces the advice shown when the server
+// rejects the credentials (default: reload the page to sign in again).
 //
 // transport (supplies any credentials; this module never adds them):
 //   call(method, params)  -> Promise<result>
@@ -211,6 +213,26 @@ function setText(node, text) {
   if (node.textContent !== text) node.textContent = text;
 }
 
+// The Sites panel starts collapsed; the choice is kept per browser where
+// storage allows.
+const SITES_OPEN_KEY = 'ariam.sitesOpen';
+
+function readSitesOpen() {
+  try {
+    return localStorage.getItem(SITES_OPEN_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function saveSitesOpen(open) {
+  try {
+    localStorage.setItem(SITES_OPEN_KEY, open ? '1' : '0');
+  } catch {
+    // Not kept; the panel still toggles.
+  }
+}
+
 function makeButton(label, className) {
   const b = el('button', className, label);
   b.type = 'button';
@@ -281,6 +303,7 @@ function makeEditor({ label, min, hint, removeLabel }) {
 
 export function mount(root, transport, options = {}) {
   const confirmFn = typeof options.confirm === 'function' ? options.confirm : (m) => window.confirm(m);
+  const unauthorizedMessage = options.unauthorizedMessage || 'Not authorized — reload the page to sign in again.';
   const state = {
     active: [],
     waiting: [],
@@ -329,7 +352,7 @@ export function mount(root, transport, options = {}) {
     const note = el('p', 'note');
     note.hidden = true;
     section.append(head);
-    return { section, count, list, empty, note };
+    return { section, title: h2, count, list, empty, note };
   }
 
   const sites = makeSection('Sites');
@@ -349,8 +372,27 @@ export function mount(root, transport, options = {}) {
     hint: 'Whole number; 0 = unlimited.',
   });
   defaults.append(defaultsHead, defaultStats, defaultEditor.form);
-  sites.section.append(defaults, sites.list, sites.empty);
+  const sitesToggle = makeButton(undefined, 'panel-toggle');
+  sitesToggle.append(...sites.title.childNodes);
+  sites.title.classList.add('panel-title-toggle');
+  sites.title.append(sitesToggle);
+  const sitesBody = el('div');
+  sitesBody.id = 'qv-sites';
+  sitesToggle.setAttribute('aria-controls', sitesBody.id);
+  sitesBody.append(defaults, sites.list, sites.empty);
+  sites.section.append(sitesBody);
   setText(sites.empty, 'No sites yet.');
+  setSitesOpen(readSitesOpen());
+  sitesToggle.addEventListener('click', () => {
+    const open = sitesBody.hidden;
+    setSitesOpen(open);
+    saveSitesOpen(open);
+  });
+
+  function setSitesOpen(open) {
+    sitesToggle.setAttribute('aria-expanded', String(open));
+    sitesBody.hidden = !open;
+  }
 
   const clearButton = makeButton('Clear list', 'btn btn-small');
   const active = makeSection('Active');
@@ -392,7 +434,7 @@ export function mount(root, transport, options = {}) {
   function pollFailure(err) {
     if (isUnauthorized(err)) {
       halted = true;
-      return 'Not authorized — reload the page to sign in again.';
+      return unauthorizedMessage;
     }
     if (err instanceof TransportError && err.kind === 'locked') return 'Too many attempts — try again later.';
     if (err instanceof TransportError && err.kind === 'network') return 'Can’t reach ariam — retrying.';
@@ -539,7 +581,7 @@ export function mount(root, transport, options = {}) {
     });
     editor.remove.addEventListener('click', async () => {
       editorBusy(editor, true);
-      const ok = await act('Returning the site to the default', () => writeSite(row.item.site, null));
+      const ok = await act('Remove rule', () => writeSite(row.item.site, null));
       editorBusy(editor, false);
       if (ok) closeEditor(editor, edit);
     });
@@ -762,7 +804,7 @@ export function mount(root, transport, options = {}) {
     const faults = results.filter((r) => !Array.isArray(r));
     if (faults.length === results.length && faults.every(isUnauthorizedFault)) {
       halted = true;
-      setPollMessage(`Not authorized — reload the page to sign in again.${staleSuffix()}`);
+      setPollMessage(unauthorizedMessage + staleSuffix());
       return;
     }
     const [a, w, s, g, summary] = results.map((r) => (Array.isArray(r) ? r[0] : undefined));

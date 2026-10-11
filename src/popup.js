@@ -103,7 +103,10 @@ confirmPanel.addEventListener('close', () => {
 let unmountQueue = null;
 
 function showQueue() {
-  if (unmountQueue === null) unmountQueue = mount(views.on, transport, { confirm: confirmCancel });
+  if (unmountQueue === null) unmountQueue = mount(views.on, transport, {
+    confirm: confirmCancel,
+    unauthorizedMessage: 'Not authorized — open settings and run Setup with ariam’s RPC secret.',
+  });
 }
 
 function hideQueue() {
