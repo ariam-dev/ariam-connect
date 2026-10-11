@@ -8,7 +8,7 @@
     "node": "^20.19.0 || ^22.13.0 || >=24"
   },
   "scripts": {
-    "vendor": "test -n \"$ARIAM_COMMIT\" && for f in queue-view.js style.css; do curl -fsSL -o src/vendor/$f https://raw.githubusercontent.com/ariam-dev/ariam/$ARIAM_COMMIT/www/$f || exit 1; done",
+    "vendor": "test -n \"$ARIAM_COMMIT\" || { echo 'usage: ARIAM_COMMIT=<ariam commit> npm run vendor' >&2; exit 1; }; for f in queue-view.js style.css; do curl -fsSL -o src/vendor/$f https://raw.githubusercontent.com/ariam-dev/ariam/$ARIAM_COMMIT/www/$f || exit 1; done",
     "lint": "web-ext lint --source-dir src",
     "start": "web-ext run --source-dir src",
     "start:android": "web-ext run --source-dir src -t firefox-android --firefox-apk org.mozilla.firefox --adb-device \"$ADB_DEVICE\"",
