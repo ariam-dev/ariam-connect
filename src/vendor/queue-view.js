@@ -510,8 +510,8 @@ export function mount(root, transport, options = {}) {
     const editor = makeEditor({
       label: 'Limit for this site',
       min: 1,
-      hint: 'Whole number, 1 or more. “Use default” returns the site to the default limit.',
-      removeLabel: 'Use default',
+      hint: 'Whole number, 1 or more. “Remove rule” puts the site under the next broader rule, or the default limit.',
+      removeLabel: 'Remove rule',
     });
     li.append(head, stats, editor.form);
     const row = { el: li, name, edit, limit, active: activeStat, queued, editor, item: null };
