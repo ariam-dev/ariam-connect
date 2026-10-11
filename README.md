@@ -125,7 +125,7 @@ If the AMO listing shows no icon, upload [`ariam-128.png`](./ariam-128.png) on t
 - [`src/lib/relay.js`](./src/lib/relay.js) — the methods the popup may call.
 - [`src/lib/fresh-tabs.js`](./src/lib/fresh-tabs.js) — tabs opened only for a download.
 - [`src/icons/`](./src/icons/) — `on.svg`, `off.svg`, and `ariam.svg` (add-on icon).
-- [`src/vendor/`](./src/vendor/) — `queue-view.js` and `style.css`, copied unmodified from ariam's status page (`www/` at ariam commit [`6c1925e0`](https://github.com/ariam-dev/ariam/tree/6c1925e0bdec6e44ff64a5341e9b9c6248d61eb0/www)).
+- [`src/vendor/`](./src/vendor/) — `queue-view.js` and `style.css`, copied unmodified from ariam's status page (`www/` at ariam commit [`79698be2`](https://github.com/ariam-dev/ariam/tree/79698be2df7c8e9c13266d9621f24f6aec8543a8/www)).
 - [`test/`](./test/) — unit tests for `src/lib/`.
 - [`amo-metadata.json`](./amo-metadata.json) — AMO listing and version metadata for `npm run sign`.
 - [`ariam-128.png`](./ariam-128.png) — AMO listing icon, rendered from `ariam.svg`; not in the package.

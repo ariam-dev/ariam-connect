@@ -303,9 +303,7 @@ function makeEditor({ label, min, hint, removeLabel }) {
 
 export function mount(root, transport, options = {}) {
   const confirmFn = typeof options.confirm === 'function' ? options.confirm : (m) => window.confirm(m);
-  const unauthorizedMessage = typeof options.unauthorizedMessage === 'string'
-    ? options.unauthorizedMessage
-    : 'Not authorized — reload the page to sign in again.';
+  const unauthorizedMessage = options.unauthorizedMessage || 'Not authorized — reload the page to sign in again.';
   const state = {
     active: [],
     waiting: [],
