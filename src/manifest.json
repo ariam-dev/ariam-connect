@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "ariam connect",
   "version": "1.0.2",
-  "description": "Hands Firefox downloads to your self-hosted ariam server and shows its queue by site.",
+  "description": "Hands Firefox downloads to your self-hosted ariam server and shows its queue and per-site limits.",
   "browser_specific_settings": {
     "gecko": {
       "id": "connect@ariam.dev",

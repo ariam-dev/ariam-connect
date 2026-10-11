@@ -1,6 +1,6 @@
 # ariam connect
 
-Firefox extension for desktop and Firefox for Android that hands downloads to one [ariam](https://github.com/ariam-dev/ariam) instance and shows its queue by site.
+Firefox extension for desktop and Firefox for Android that hands downloads to one [ariam](https://github.com/ariam-dev/ariam) instance and shows its queue and per-site limits.
 
 ## Install
 
@@ -26,7 +26,7 @@ To change the instance URL or RPC secret, run **Setup** again. The same page has
 - **Change passphrase:** current passphrase, then the new one twice → **Change**. A wrong current passphrase leaves it unchanged.
 - **Reset:** erases the instance URL and the sealed secret and turns ariam connect off. If you forget the passphrase, use **Reset**, then **Setup**.
 
-`storage.local` holds only `instanceUrl` and `vault`: the RPC secret under AES-GCM-256, keyed by PBKDF2-SHA256 (random salt; parameters in [`src/lib/vault.js`](./src/lib/vault.js)) from the passphrase. Turning on decrypts the secret into the background page's memory only; off drops it from memory; the profile holds it only sealed.
+`storage.local` holds only `instanceUrl` and `vault`: the RPC secret under AES-GCM-256, keyed by PBKDF2-SHA256 (random salt; parameters in [`src/lib/vault.js`](./src/lib/vault.js)) from the passphrase. Turning on decrypts the secret into the background page's memory only; off drops it from memory once any hand-off already in flight finishes; the profile holds it only sealed.
 
 ## Use
 
