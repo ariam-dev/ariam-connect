@@ -26,7 +26,7 @@ To change the instance URL or RPC secret, run **Setup** again. The same page has
 - **Change passphrase:** current passphrase, then the new one twice → **Change**. A wrong current passphrase leaves it unchanged.
 - **Reset:** erases the instance URL and the sealed secret and turns ariam connect off. If you forget the passphrase, use **Reset**, then **Setup**.
 
-`storage.local` holds only `instanceUrl` and `vault`: the RPC secret under AES-GCM-256, keyed by PBKDF2-SHA256 (random salt; parameters in [`src/lib/vault.js`](./src/lib/vault.js)) from the passphrase. Turning on decrypts the secret into the background page's memory only; off drops it from memory once any hand-off already in flight finishes; the profile holds it only sealed.
+`storage.local` holds only `instanceUrl` and `vault`: the RPC secret under AES-GCM-256, keyed by PBKDF2-SHA256 (random salt; parameters in [`src/lib/vault.js`](./src/lib/vault.js)) from the passphrase. Turning on decrypts the secret into the background page's memory only; off drops it from memory once any request already in flight (an instance check, a hand-off, a popup call) finishes; the profile holds it only sealed.
 
 ## Use
 
@@ -58,7 +58,7 @@ While on, a response is a download when all of these hold:
 
 No filename or directory is sent; ariam names the file and derives the site ([site rule](https://github.com/ariam-dev/ariam#per-site-concurrency)).
 
-- ariam accepts → Firefox cancels its download. A tab opened only for the download closes.
+- ariam accepts → Firefox cancels its download. A tab opened only for the download closes, unless it is Firefox's last tab.
 - ariam rejects it, is unreachable, or doesn't answer within 10 s → Firefox downloads normally and a notification shows `ariam connect: <error>`. After a timeout it adds `ariam may have queued it too`.
 
 RPC goes to `<instance URL>/jsonrpc` with `token:<secret>`; a redirect fails the call.
@@ -76,7 +76,7 @@ RPC goes to `<instance URL>/jsonrpc` with `token:<secret>`; a redirect fails the
 - a tab showing a local (`file:`) or other non-web document can close after a capture started from it, since it isn't seen as holding a page;
 - right-click sends the page's origin as `Referer:` even where the page's referrer policy withholds it (the menus API doesn't expose that policy);
 - right-click inside a third-party frame sends no partitioned cookies (Firefox's cookie partitioning);
-- right-click on a link that redirects to another origin (`http` → `https` included) sends that origin no cookies ([ariam sends cookies only to the origin it was given](https://github.com/ariam-dev/ariam#changes-from-aria2)), so a server that needs them returns its sign-in page, saved as the file. Click the link instead when it is a download capture takes (capture hands off the final URL); a right-click-only download (a PDF without `attachment`) behind such a redirect goes through Firefox.
+- right-click on a link that redirects to another origin (`http` → `https` included) sends that origin no cookies ([ariam sends cookies only to the origin it was given](https://github.com/ariam-dev/ariam#changes-from-aria2)), so a server that needs them returns its sign-in page, saved as the file. If the response meets the capture rules above, click the link normally instead, since capture hands off the final URL; a right-click-only download (a PDF without `attachment`) behind such a redirect goes through Firefox.
 
 **Not supported:** single-use download URLs. ariam's request fails, and Firefox's download is already cancelled. Turn ariam connect off and download in Firefox.
 
