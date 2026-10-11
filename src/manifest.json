@@ -1,0 +1,44 @@
+{
+  "manifest_version": 2,
+  "name": "ariam connect",
+  "version": "1.0.2",
+  "description": "Hands Firefox downloads to your self-hosted ariam server and shows its queue by site.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "connect@ariam.dev",
+      "strict_min_version": "140.0",
+      "data_collection_permissions": {
+        "required": ["authenticationInfo", "browsingActivity", "websiteContent", "websiteActivity"]
+      }
+    },
+    "gecko_android": {
+      "strict_min_version": "142.0"
+    }
+  },
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "storage",
+    "notifications",
+    "menus",
+    "cookies",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "page": "background.html",
+    "persistent": true
+  },
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": "icons/off.svg",
+    "default_area": "navbar"
+  },
+  "options_ui": {
+    "page": "options.html"
+  },
+  "icons": {
+    "48": "icons/ariam.svg",
+    "96": "icons/ariam.svg"
+  }
+}

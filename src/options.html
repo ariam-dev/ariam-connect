@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2026 dta0one -->
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ariam connect options</title>
+<link rel="stylesheet" href="options.css">
+</head>
+<body>
+<p id="state" role="status"></p>
+
+<section>
+<h2>Setup</h2>
+<p>Saving turns ariam connect off.</p>
+<form id="setup" novalidate>
+<label for="setup-url">Instance URL</label>
+<input id="setup-url" type="url" placeholder="https://host:port" autocomplete="off" spellcheck="false">
+<label for="setup-secret">RPC secret</label>
+<input id="setup-secret" type="password" autocomplete="off">
+<label for="setup-passphrase">Passphrase</label>
+<input id="setup-passphrase" type="password" autocomplete="off">
+<label for="setup-passphrase-again">Passphrase again</label>
+<input id="setup-passphrase-again" type="password" autocomplete="off">
+<button type="submit">Save</button>
+<p class="result" role="status"></p>
+</form>
+</section>
+
+<section>
+<h2>Change passphrase</h2>
+<form id="change" novalidate>
+<label for="change-current">Current passphrase</label>
+<input id="change-current" type="password" autocomplete="off">
+<label for="change-next">New passphrase</label>
+<input id="change-next" type="password" autocomplete="off">
+<label for="change-next-again">New passphrase again</label>
+<input id="change-next-again" type="password" autocomplete="off">
+<button type="submit">Change</button>
+<p class="result" role="status"></p>
+</form>
+</section>
+
+<section>
+<h2>Reset</h2>
+<p>Erases the instance URL and the stored secret and turns ariam connect off. A forgotten passphrase needs a reset and setup again.</p>
+<form id="reset">
+<button type="submit">Reset</button>
+<p class="result" role="status"></p>
+</form>
+</section>
+
+<script type="module" src="options.js"></script>
+</body>
+</html>

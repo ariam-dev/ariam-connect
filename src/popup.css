@@ -1,0 +1,150 @@
+/* Copyright (c) 2026 dta0one */
+
+/* Android shows the popup as a full-width overlay (html.android, set by
+   popup.js). */
+
+body {
+  width: 400px;
+}
+
+html.android body {
+  width: auto;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.topbar-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 1.125rem;
+  overflow-wrap: anywhere;
+}
+
+.topbar .btn {
+  flex: none;
+}
+
+html.android .topbar .btn {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Desktop: compact. The vendored sheet is phone-first (16px text, 44px
+   targets); html.android keeps those sizes. */
+
+html:not(.android),
+html:not(.android) body {
+  font-size: 13px;
+}
+
+html:not(.android) .btn {
+  min-height: 28px;
+  min-width: 28px;
+  padding: 0 10px;
+}
+
+html:not(.android) .topbar {
+  gap: 6px;
+  padding: 6px 10px;
+}
+
+html:not(.android) .view {
+  margin: 10px;
+}
+
+html:not(.android) .app {
+  padding: 10px 10px 26px;
+}
+
+html:not(.android) .panel {
+  margin-bottom: 10px;
+  padding: 3px 10px;
+}
+
+html:not(.android) .panel-head {
+  min-height: 42px;
+}
+
+html:not(.android) .msg {
+  margin-bottom: 6px;
+  padding: 8px 10px;
+}
+
+html:not(.android) .empty,
+html:not(.android) .note {
+  padding: 10px 0;
+}
+
+html:not(.android) .site {
+  padding: 8px 0;
+}
+
+html:not(.android) .dl {
+  padding: 10px 0;
+}
+
+.view {
+  margin: 12px;
+}
+
+#unlock label {
+  display: block;
+  margin-bottom: 4px;
+}
+
+#unlock input {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--fg);
+  font: inherit;
+}
+
+html.android #unlock input {
+  min-height: 44px;
+}
+
+#unlock .btn {
+  margin-top: 8px;
+}
+
+#unlock-result:empty {
+  display: none;
+}
+
+.confirm {
+  width: calc(100% - 24px);
+  max-width: 22rem;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--fg);
+}
+
+.confirm::backdrop {
+  background: rgb(0 0 0 / 40%);
+}
+
+.confirm-message {
+  margin: 0 0 12px;
+  overflow-wrap: anywhere;
+}
+
+.confirm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
