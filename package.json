@@ -4,6 +4,9 @@
   "type": "module",
   "license": "MIT",
   "author": "dta0one",
+  "engines": {
+    "node": ">=20.6"
+  },
   "scripts": {
     "vendor": "test -n \"$ARIAM_COMMIT\" && for f in queue-view.js style.css; do curl -fsSL -o src/vendor/$f https://raw.githubusercontent.com/ariam-dev/ariam/$ARIAM_COMMIT/www/$f || exit 1; done",
     "lint": "web-ext lint --source-dir src",
