@@ -2,7 +2,7 @@
 //
 // The extension starts off on every launch. While on, the decrypted RPC secret
 // lives only in this page's memory (`secret` and the hand-off session); it is
-// never written anywhere and never leaves this page.
+// never stored, and is sent only to the instance as the RPC token.
 //
 // storage.local holds exactly two keys: `instanceUrl` (an origin) and `vault`
 // (a seal record from lib/vault.js).
