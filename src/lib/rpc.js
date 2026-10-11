@@ -99,8 +99,3 @@ export async function call(instanceUrl, secret, method, params = []) {
   }
   return data.result;
 }
-
-// calls = [{methodName, params}], params without the token.
-export function multicall(instanceUrl, secret, calls) {
-  return call(instanceUrl, secret, 'system.multicall', [calls]);
-}

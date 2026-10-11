@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { call, multicall } from '../src/lib/rpc.js';
+import { call } from '../src/lib/rpc.js';
 
 const INSTANCE = 'https://ariam.example:6800';
 const SECRET = 's3cret';
@@ -37,11 +37,11 @@ test('an ordinary call carries the token first', async (t) => {
 
 test('system.multicall carries no outer token, and every sub-call does', async (t) => {
   const requests = stubFetch(t);
-  await multicall(INSTANCE, SECRET, [
+  await call(INSTANCE, SECRET, 'system.multicall', [[
     { methodName: 'aria2.getGlobalStat', params: [] },
     { methodName: 'aria2.tellActive', params: [['gid', 'status']] },
     { methodName: 'ariam.getSiteSummary' },
-  ]);
+  ]]);
   const { body } = requests[0];
   assert.equal(body.method, 'system.multicall');
   assert.equal(body.params.length, 1);
@@ -55,7 +55,7 @@ test('system.multicall carries no outer token, and every sub-call does', async (
 test("requests are made with redirect: 'error'", async (t) => {
   const requests = stubFetch(t);
   await call(INSTANCE, SECRET, 'aria2.getVersion');
-  await multicall(INSTANCE, SECRET, [{ methodName: 'aria2.getVersion', params: [] }]);
+  await call(INSTANCE, SECRET, 'system.multicall', [[{ methodName: 'aria2.getVersion', params: [] }]]);
   assert.equal(requests.length, 2);
   for (const request of requests) assert.equal(request.init.redirect, 'error');
 });
