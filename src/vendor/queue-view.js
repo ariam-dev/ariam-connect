@@ -5,6 +5,8 @@
 //
 // options.confirm(message) -> boolean | Promise<boolean> replaces
 // window.confirm, which extension popups do not have.
+// options.unauthorizedMessage replaces the advice shown when the server
+// rejects the credentials (default: reload the page to sign in again).
 //
 // transport (supplies any credentials; this module never adds them):
 //   call(method, params)  -> Promise<result>
@@ -281,6 +283,9 @@ function makeEditor({ label, min, hint, removeLabel }) {
 
 export function mount(root, transport, options = {}) {
   const confirmFn = typeof options.confirm === 'function' ? options.confirm : (m) => window.confirm(m);
+  const unauthorizedMessage = typeof options.unauthorizedMessage === 'string'
+    ? options.unauthorizedMessage
+    : 'Not authorized — reload the page to sign in again.';
   const state = {
     active: [],
     waiting: [],
@@ -392,7 +397,7 @@ export function mount(root, transport, options = {}) {
   function pollFailure(err) {
     if (isUnauthorized(err)) {
       halted = true;
-      return 'Not authorized — reload the page to sign in again.';
+      return unauthorizedMessage;
     }
     if (err instanceof TransportError && err.kind === 'locked') return 'Too many attempts — try again later.';
     if (err instanceof TransportError && err.kind === 'network') return 'Can’t reach ariam — retrying.';
@@ -539,7 +544,7 @@ export function mount(root, transport, options = {}) {
     });
     editor.remove.addEventListener('click', async () => {
       editorBusy(editor, true);
-      const ok = await act('Returning the site to the default', () => writeSite(row.item.site, null));
+      const ok = await act('Remove rule', () => writeSite(row.item.site, null));
       editorBusy(editor, false);
       if (ok) closeEditor(editor, edit);
     });
@@ -762,7 +767,7 @@ export function mount(root, transport, options = {}) {
     const faults = results.filter((r) => !Array.isArray(r));
     if (faults.length === results.length && faults.every(isUnauthorizedFault)) {
       halted = true;
-      setPollMessage(`Not authorized — reload the page to sign in again.${staleSuffix()}`);
+      setPollMessage(unauthorizedMessage + staleSuffix());
       return;
     }
     const [a, w, s, g, summary] = results.map((r) => (Array.isArray(r) ? r[0] : undefined));
