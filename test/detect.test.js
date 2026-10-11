@@ -34,6 +34,7 @@ test('DISPLAYABLE_TYPES is the documented list', () => {
     'application/ecmascript',
     'application/x-javascript',
     'application/x-xpinstall',
+    'application/ogg',
   ]);
 });
 

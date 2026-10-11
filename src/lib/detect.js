@@ -17,6 +17,7 @@ export const DISPLAYABLE_TYPES = Object.freeze([
   'application/ecmascript',
   'application/x-javascript',
   'application/x-xpinstall',
+  'application/ogg',
 ]);
 
 export function headerValue(headers, name) {
