@@ -5,7 +5,7 @@ Firefox extension for desktop and Firefox for Android that hands downloads to on
 ## Install
 
 1. Install **ariam connect** from [AMO](https://addons.mozilla.org/).
-2. Allow it in private windows:
+2. Optional: to capture in private windows too, allow it there. Downloads from private windows then go to the instance like any other, with their cookies and referer.
    - Desktop: `about:addons` → ariam connect → **Run in Private Windows** → **Allow**.
    - Android: **Add-ons** → ariam connect → **Allow in private browsing**.
 
@@ -19,12 +19,12 @@ Popup → gear → **Setup**:
 | RPC secret | The instance's `rpc-secret` |
 | Passphrase, Passphrase again | One to three words separated by single spaces |
 
-**Save** turns ariam connect off, stores the URL and the sealed secret, then calls `aria2.getVersion` on the instance. Pass: the form shows `Saved. ariam connect is off. aria2 <version> answered.`
+**Save** turns ariam connect off, stores the URL and the sealed secret, then calls `aria2.getVersion` on the instance. On success the form shows `Saved. ariam connect is off. aria2 <version> answered.`
 
-A new instance URL or RPC secret is **Setup** again. The same page has:
+To change the instance URL or RPC secret, run **Setup** again. The same page has:
 
 - **Change passphrase:** current passphrase, then the new one twice → **Change**. A wrong current passphrase leaves it unchanged.
-- **Reset:** erases the instance URL and the sealed secret and turns ariam connect off. A forgotten passphrase is **Reset**, then **Setup**.
+- **Reset:** erases the instance URL and the sealed secret and turns ariam connect off. If you forget the passphrase, use **Reset**, then **Setup**.
 
 `storage.local` holds only `instanceUrl` and `vault`: the RPC secret under AES-GCM-256, keyed by PBKDF2-SHA256 (random salt; parameters in [`src/lib/vault.js`](./src/lib/vault.js)) from the passphrase. Turning on decrypts the secret into the background page's memory only; off drops it from memory; the profile holds it only sealed.
 
@@ -72,6 +72,7 @@ RPC goes to `<instance URL>/jsonrpc` with `token:<secret>`; a redirect fails the
 
 **Limitations:**
 
+- Firefox's own download checks (Safe Browsing, blocking insecure downloads from secure pages, blocking downloads from sandboxed frames) run after the hand-off, so they don't apply to downloads sent to ariam;
 - a tab showing a local (`file:`) or other non-web document can close after a capture started from it, since it isn't seen as holding a page;
 - right-click sends the page's origin as `Referer:` even where the page's referrer policy withholds it (the menus API doesn't expose that policy);
 - right-click inside a third-party frame sends no partitioned cookies (Firefox's cookie partitioning);
@@ -100,7 +101,7 @@ adb devices
 ADB_DEVICE=<serial> npm run start:android
 ```
 
-**Page check.** Extension pages have no inline script or `eval`, and server strings reach the DOM only through `textContent` or attribute setters. Pass: `rg -n '\son[a-z]+\s*=|eval\(|new Function|innerHTML|insertAdjacentHTML|outerHTML|document\.write' src` returns nothing.
+**Page check.** Extension pages have no inline script or `eval`, and server strings reach the DOM only through `textContent` or attribute setters. This should print nothing: `rg -n '\son[a-z]+\s*=|eval\(|new Function|innerHTML|insertAdjacentHTML|outerHTML|document\.write' src`
 
 ## Release
 
