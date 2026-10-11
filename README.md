@@ -130,4 +130,5 @@ If the AMO listing shows no icon, upload [`ariam-128.png`](./ariam-128.png) on t
 - [`amo-metadata.json`](./amo-metadata.json) — AMO listing and version metadata for `npm run sign`.
 - [`ariam-128.png`](./ariam-128.png) — AMO listing icon, rendered from `ariam.svg`; not in the package.
 - [`package.json`](./package.json), [`package-lock.json`](./package-lock.json) — scripts and the `web-ext` dev dependency.
+- [`CONTRIBUTING.md`](./CONTRIBUTING.md), [`SECURITY.md`](./SECURITY.md) — contributing and reporting vulnerabilities.
 - [`LICENSE`](./LICENSE) — MIT; [`src/LICENSE`](./src/LICENSE) is the same text, so the package carries it.
