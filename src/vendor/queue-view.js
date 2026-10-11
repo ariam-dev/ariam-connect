@@ -213,6 +213,26 @@ function setText(node, text) {
   if (node.textContent !== text) node.textContent = text;
 }
 
+// The Sites panel starts collapsed; the choice is kept per browser where
+// storage allows.
+const SITES_OPEN_KEY = 'ariam.sitesOpen';
+
+function readSitesOpen() {
+  try {
+    return localStorage.getItem(SITES_OPEN_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function saveSitesOpen(open) {
+  try {
+    localStorage.setItem(SITES_OPEN_KEY, open ? '1' : '0');
+  } catch {
+    // Not kept; the panel still toggles.
+  }
+}
+
 function makeButton(label, className) {
   const b = el('button', className, label);
   b.type = 'button';
@@ -334,7 +354,7 @@ export function mount(root, transport, options = {}) {
     const note = el('p', 'note');
     note.hidden = true;
     section.append(head);
-    return { section, count, list, empty, note };
+    return { section, title: h2, count, list, empty, note };
   }
 
   const sites = makeSection('Sites');
@@ -354,8 +374,27 @@ export function mount(root, transport, options = {}) {
     hint: 'Whole number; 0 = unlimited.',
   });
   defaults.append(defaultsHead, defaultStats, defaultEditor.form);
-  sites.section.append(defaults, sites.list, sites.empty);
+  const sitesToggle = makeButton(undefined, 'panel-toggle');
+  sitesToggle.append(...sites.title.childNodes);
+  sites.title.classList.add('panel-title-toggle');
+  sites.title.append(sitesToggle);
+  const sitesBody = el('div');
+  sitesBody.id = 'qv-sites';
+  sitesToggle.setAttribute('aria-controls', sitesBody.id);
+  sitesBody.append(defaults, sites.list, sites.empty);
+  sites.section.append(sitesBody);
   setText(sites.empty, 'No sites yet.');
+  setSitesOpen(readSitesOpen());
+  sitesToggle.addEventListener('click', () => {
+    const open = sitesBody.hidden;
+    setSitesOpen(open);
+    saveSitesOpen(open);
+  });
+
+  function setSitesOpen(open) {
+    sitesToggle.setAttribute('aria-expanded', String(open));
+    sitesBody.hidden = !open;
+  }
 
   const clearButton = makeButton('Clear list', 'btn btn-small');
   const active = makeSection('Active');

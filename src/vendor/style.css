@@ -140,6 +140,38 @@ body {
   font-size: 1.125rem;
 }
 
+.panel-title-toggle {
+  flex: 1 1 auto;
+}
+
+.panel-toggle {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.panel-toggle::before {
+  content: "";
+  display: inline-block;
+  width: 0.45em;
+  height: 0.45em;
+  margin: 0 0.6em 0.12em 0.1em;
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+  transform: rotate(-45deg);
+}
+
+.panel-toggle[aria-expanded="true"]::before {
+  transform: rotate(45deg);
+}
+
 .count {
   color: var(--muted);
   font-weight: normal;
