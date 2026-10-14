@@ -4,7 +4,7 @@ Firefox extension for desktop and Firefox for Android that hands downloads to on
 
 ## Install
 
-1. Install **ariam connect** from [AMO](https://addons.mozilla.org/).
+1. Install **ariam connect** from [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/ariam-connect/).
 2. Optional: to capture in private windows too, allow it there. Downloads from private windows then go to the instance like any other, with their cookies and referer.
    - Desktop: `about:addons` → ariam connect → **Run in Private Windows** → **Allow**.
    - Android: **Add-ons** → ariam connect → **Allow in private browsing**.
