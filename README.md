@@ -89,7 +89,7 @@ RPC goes to `<instance URL>/jsonrpc` with `token:<secret>`; a redirect fails the
 
 ## Privacy
 
-ariam connect sends data only to the instance you set up, never to the developer or anyone else: each download's URL, the `Referer:` Firefox sent, the page's origin as the site hint, and its cookies only to an instance confirmed as ariam ([Capture](#capture)). Firefox's install prompt lists these as the data the extension collects: authentication information, browsing activity, website content and website activity. The profile holds only the instance URL and the sealed RPC secret ([Setup](#setup)).
+ariam connect sends data only to the instance you set up, never to the developer or anyone else: each download's URL; as `Referer:`, the one Firefox sent for a captured download, or the page's origin for a right-click, even where the page's referrer policy withholds it ([Use](#use)); the page's origin as the site hint; and its cookies only to an instance confirmed as ariam ([Capture](#capture)). Firefox's install prompt lists these as the data the extension collects: authentication information, browsing activity, website content and website activity. `storage.local` holds only the instance URL and the sealed RPC secret ([Setup](#setup)); the popup also remembers whether its Sites panel is open.
 
 ## Development
 
