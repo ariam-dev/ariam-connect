@@ -1,6 +1,13 @@
 # ariam connect
 
-Firefox extension for desktop and Firefox for Android that hands downloads to one [ariam](https://github.com/ariam-dev/ariam) instance and shows its queue and per-site limits.
+Extension for Firefox on desktop and Android that hands downloads to one [ariam](https://github.com/ariam-dev/ariam) instance and shows its queue and per-site limits. It is off every time Firefox starts; your passphrase turns it on.
+
+## Requirements
+
+- Firefox 140 or later on desktop, or Firefox for Android 142 or later.
+- An ariam instance with RPC on and an `rpc-secret`, reachable over HTTPS with a certificate Firefox trusts, or over `http:` on `localhost` / `127.0.0.1`. [ariam's README](https://github.com/ariam-dev/ariam#running) has an example configuration.
+
+Stock aria2 also takes hand-offs, but without cookies, and its queue shows without names, sites or per-site limits.
 
 ## Install
 
@@ -80,6 +87,10 @@ RPC goes to `<instance URL>/jsonrpc` with `token:<secret>`; a redirect fails the
 
 **Not supported:** single-use download URLs. ariam's request fails, and Firefox's download is already cancelled. Turn ariam connect off and download in Firefox.
 
+## Privacy
+
+ariam connect sends data only to the instance you set up, never to the developer or anyone else: each download's URL, the `Referer:` Firefox sent, the page's origin as the site hint, and its cookies only to an instance confirmed as ariam ([Capture](#capture)). Firefox's install prompt lists these as the data the extension collects: authentication information, browsing activity, website content and website activity. The profile holds only the instance URL and the sealed RPC secret ([Setup](#setup)).
+
 ## Development
 
 From the repository root: `npm ci --ignore-scripts`.
@@ -109,7 +120,13 @@ ADB_DEVICE=<serial> npm run start:android
 2. `npm run sign`. It needs the AMO API credentials `WEB_EXT_API_KEY` and `WEB_EXT_API_SECRET` from a git-ignored `.env` file. It submits `src/` to AMO as a listed version with [`amo-metadata.json`](./amo-metadata.json).
 3. Once AMO approves the version, installed copies update automatically. The update applies once ariam connect is off and no hand-off or settings change is in flight: at once if it already is, otherwise after **Off** or at the next Firefox restart.
 
-If the AMO listing shows no icon, upload [`ariam-128.png`](./ariam-128.png) on the listing.
+## Contributing and security
+
+Bugs and requests go to [issues](https://github.com/ariam-dev/ariam-connect/issues); see [CONTRIBUTING.md](./CONTRIBUTING.md) and, for vulnerabilities, [SECURITY.md](./SECURITY.md).
+
+## License
+
+MIT; see [`LICENSE`](./LICENSE). The files in [`src/vendor/`](./src/vendor/) come from ariam's status page, which is also MIT licensed.
 
 ## Files
 
